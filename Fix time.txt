@@ -1,0 +1,23 @@
+For alle columns i "Timestamp" skal følgene ske:
+For SCHEDULED_DEPARTURE  og  SCHEDULED_ARRIVAL, skal du i første step ikke fjerne den sidste char
+
+Step 1: Lav om til en string og fjern den sidste char (Skulle i alle tilfælde meget gerne være '0' som bliver fjernet) (F.eks. 100 bliver til 10)
+
+Step 2: For hvert tal, som string, hvis dens længde er mindre en 4, så tilføj x '0' foran den string (F.eks. så 10, bliver til 0010)
+her skal x være lig med "4 - Længden af stringen"
+
+Step 3: tilføj et semicolon ':' i midten af den string, som nu gerne skulle være 4 char's lang (F.eks. så 0010 bliver til 00:10)
+
+Step 4: Profit????
+
+
+
+
+
+Andet: DISTANCE
+
+
+Minutes: DEPARTURE_DELAY; TAXI_OUT; SCHEDULED_TIME; ELAPSED_TIME; AIR_TIME; TAXI_IN; ARRIVAL_DELAY; AIR_SYSTEM_DELAY; SECURITY_DELAY; AIRLINE_DELAY; LATE_AIRCRAFT_DELAY; WEATHER_DELAY
+
+
+Timestamp: SCHEDULED_DEPARTURE; DEPARTURE_TIME; WHEELS_OFF; WHEELS_ON; SCHEDULED_ARRIVAL; ARRIVAL_TIME

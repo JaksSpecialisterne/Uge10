@@ -36,5 +36,3 @@ def map_faa_to_iata(df: pd.DataFrame, column: str, mapping: pd.DataFrame):
 
 if __name__ == "__main__":
     fix_faa_id()
-    arg = sys.argv.pop()
-    # FixMissingEntries(arg)

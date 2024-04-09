@@ -7,22 +7,20 @@ def FixMissingEntries(Filename: str):
     pass
 
 
-def fix_faa_id():
+def fix_faa_id(flights: pd.DataFrame) -> pd.DataFrame:
     df_letters = pd.read_csv("Data/L_AIRPORT.csv").dropna()
     df_numbers = pd.read_csv("Data/L_AIRPORT_ID.csv").dropna()
-    flights = pd.read_csv("Data/flights.csv")
 
     df = pd.merge(df_letters, df_numbers, on="Description", how="left").dropna()
 
     df.columns = ["IATA", "Description", "FAA"]
 
     df["FAA"] = df["FAA"].astype(int)
-    df["FAA"] = df["FAA"].astype(str)
 
     flights = map_faa_to_iata(flights, "ORIGIN_AIRPORT", df)
     flights = map_faa_to_iata(flights, "DESTINATION_AIRPORT", df)
 
-    flights.to_csv("Data/flights.csv")
+    return flights
 
 
 def map_faa_to_iata(df: pd.DataFrame, column: str, mapping: pd.DataFrame):
@@ -37,5 +35,36 @@ def map_faa_to_iata(df: pd.DataFrame, column: str, mapping: pd.DataFrame):
     return df
 
 
+def fix_timestamp(time):
+    try:
+        time = int(time)
+        time = str(time).zfill(4)
+        time = f"{time[:2]}:{time[2:]}"
+        if time == "24:00":
+            time = "00:00"
+    except ValueError:
+        pass
+    return time
+
+
+def fix_time(flights: pd.DataFrame) -> pd.DataFrame:
+    timestamps = [
+        "SCHEDULED_DEPARTURE",
+        "DEPARTURE_TIME",
+        "WHEELS_OFF",
+        "WHEELS_ON",
+        "SCHEDULED_ARRIVAL",
+        "ARRIVAL_TIME",
+    ]
+
+    for i in timestamps:
+        flights[i] = flights[i].apply(fix_timestamp)
+
+    return flights
+
+
 if __name__ == "__main__":
-    fix_faa_id()
+    data = pd.read_csv("Data/flights.csv")
+    data = fix_time(data)
+    data = fix_faa_id(data)
+    data.to_csv("Data/flights.csv")

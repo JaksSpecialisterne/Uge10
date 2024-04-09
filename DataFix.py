@@ -8,13 +8,16 @@ def FixMissingEntries(Filename: str):
 
 
 def fix_faa_id():
-    df_letters = pd.read_csv("Data/L_AIRPORT.csv")
-    df_numbers = pd.read_csv("Data/L_AIRPORT_ID.csv")
+    df_letters = pd.read_csv("Data/L_AIRPORT.csv").dropna()
+    df_numbers = pd.read_csv("Data/L_AIRPORT_ID.csv").dropna()
     flights = pd.read_csv("Data/flights.csv")
 
-    df = pd.merge(df_letters, df_numbers, on="Description", how="left")
+    df = pd.merge(df_letters, df_numbers, on="Description", how="left").dropna()
 
     df.columns = ["IATA", "Description", "FAA"]
+
+    df["FAA"] = df["FAA"].astype(int)
+    df["FAA"] = df["FAA"].astype(str)
 
     flights = map_faa_to_iata(flights, "ORIGIN_AIRPORT", df)
     flights = map_faa_to_iata(flights, "DESTINATION_AIRPORT", df)
